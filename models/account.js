@@ -10,7 +10,6 @@ const accountSchema = mongoose.Schema({
     phone: {
         type: Number,
         trim: true,
-        required: true,
         maxlength: 11
     },
     balance: {
@@ -25,7 +24,7 @@ const accountSchema = mongoose.Schema({
         maxlength: 32
     },
     pin: {
-        type: Number,
+        type: String,
         trim: true,
         required: true,
     }

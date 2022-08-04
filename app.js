@@ -11,7 +11,12 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 var mongoose = require('mongoose');
 const accountRouter = require('./routes/account');
+const auth = require('./routes/users');
 const transactionRouter = require('./routes/transaction');
+const session = require('express-session')
+const passport = require('passport');
+const flash = require('connect-flash');
+require('./middlewares/verifyToken');
 
 
 var app = express();
@@ -32,6 +37,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', accountRouter);
 app.use('/api', transactionRouter);
+app.use('/', auth);
+
+//authen
+app.use(session({
+  secret: 'adsa897adsa98bs',
+  resave: false,
+  saveUninitialized: false,
+}))
+app.use(flash());
+app.use(passport.initialize())
+app.use(passport.session());
 
 
 app.use(bodyParser.urlencoded({ extended: false }));

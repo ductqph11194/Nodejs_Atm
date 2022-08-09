@@ -5,14 +5,16 @@ const getAccounts = async (req, res) => {
     const result = await Account.find()
     res.send(result);
 }
+
 const createAccout = async (req, res) => {
     const data = req.body
     console.log(req.body);
     const result = await new Account(data).save()
     res.json(result);
 }
+
 const getAccById = (req, res) => {
-    const id = req.params.accId;
+    const id = req.userId
     Account.findById(id)
         .select("_id name phone")
         .then((result) => {
@@ -28,8 +30,9 @@ const getAccById = (req, res) => {
             });
         });
 }
+
 const getBalance = (req, res) => {
-    const id = req.params.accId;
+    const id = req.userId
     Account.findById(id)
         .select("balance name phone accountNumber")
         .then((result) => {

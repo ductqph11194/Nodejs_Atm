@@ -4,7 +4,6 @@ const Account = require('../models/account');
 const getTransaction = async (req, res) => {
     const result = await Transaction.find()
     res.send(result);
-    console.log(result);
 }
 
 const updateTransaction = async (req, res) => {
@@ -25,7 +24,6 @@ const createWithdraw = async (req, res) => {
         const data = { amount: req.body.amount, source: req.body.accountNumber, type: 'withdraw' }
         const result = await new Transaction(data).save()
 
-        // update AccountBalance
         console.log(req.body.accountNumber);
         const updatedBalance = await Account.findOneAndUpdate({ accountNumber: req.body.accountNumber }, {
             $inc: { balance: -req.body.amount },
@@ -61,6 +59,24 @@ const createTransfer = async (req, res) => {
 }
 
 
+const getTransactionById = (req, res) => {
+    const accNumber = req.accNumber
+    // const user = Transaction.findOne({ source: accNumber });
+    // console.log(user);
+    Transaction.find({ source: accNumber })
+        .then((result) => {
+            res.status(200).json({
+                result
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: "This Transaction does not exist",
+                error: err.message,
+            });
+        });
+}
 
 
-module.exports = { getTransaction, updateTransaction, createWithdraw, createTransfer } 
+module.exports = { getTransaction, updateTransaction, createWithdraw, createTransfer, getTransactionById } 

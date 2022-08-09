@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var indexRouter = require('./routes/index');
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
@@ -12,6 +12,7 @@ const morgan = require('morgan');
 var mongoose = require('mongoose');
 const accountRouter = require('./routes/account');
 const auth = require('./routes/users');
+const verifyToken = require('./middlewares/verifyToken');
 const transactionRouter = require('./routes/transaction');
 const session = require('express-session')
 const passport = require('passport');
@@ -34,9 +35,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/api', accountRouter);
-app.use('/api', transactionRouter);
+
+app.use('/api', verifyToken, accountRouter);
+app.use('/api', verifyToken, transactionRouter);
 app.use('/', auth);
 
 //authen

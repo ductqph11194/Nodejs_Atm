@@ -5,8 +5,9 @@ const verifyToken = require('../middlewares/verifyToken')
 const router = express.Router();
 
 router.get('/accounts', verifyToken, accountController.getAccounts);
-router.post('/accountss', accountController.createAccout);
 router.get('/account/', accountController.getAccById);
 router.get('/account/balance-inquiry', accountController.getBalance);
+router.put('/change-pin', accountController.changePin)
+
 
 module.exports = router;

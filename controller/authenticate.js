@@ -17,7 +17,6 @@ const createAccount = async (request, response) => {
         accountNumber: request.body.accountNumber,
         pin: hashpin,
         balance: 0
-
     });
 
     try {
@@ -30,6 +29,7 @@ const createAccount = async (request, response) => {
 
 const logIn = async (request, response) => {
     const user = await Account.findOne({ accountNumber: request.body.accountNumber });
+    console.log(user);
     if (!user) return response.status(200).json({ code: 422, message: 'accountNumber or pin is not correct' });
     const checkpin = await bcrypt.compare(request.body.pin, user.pin);
 

@@ -14,7 +14,6 @@ const updateTransaction = async (req, res) => {
 
 const createWithdraw = async (req, res) => {
 
-    // validate
     if (req.body.amount <= 0) {
         return res.status(400).json({
             error: "bạn cần nhập số lớn hơn 0"
@@ -24,7 +23,6 @@ const createWithdraw = async (req, res) => {
         const data = { amount: req.body.amount, source: req.body.accountNumber, type: 'withdraw' }
         const result = await new Transaction(data).save()
 
-        console.log(req.body.accountNumber);
         const updatedBalance = await Account.findOneAndUpdate({ accountNumber: req.body.accountNumber }, {
             $inc: { balance: -req.body.amount },
         });
@@ -35,7 +33,6 @@ const createWithdraw = async (req, res) => {
 
 const createTransfer = async (req, res) => {
 
-    // validate
     if (req.body.amount <= 0) {
         return res.status(400).json({
             error: "bạn cần nhập số lớn hơn 0"
@@ -45,8 +42,6 @@ const createTransfer = async (req, res) => {
         const data = { amount: req.body.amount, source: req.body.accountNumber, dest: req.body.accountNumberReceiver, type: 'transfer' }
         const result = await new Transaction(data).save()
 
-        // update AccountBalance
-        console.log(req.body.accountNumber);
         const updatedBalanceTransfer = await Account.findOneAndUpdate({ accountNumber: req.body.accountNumberReceiver }, {
             $inc: { balance: +req.body.amount },
         });
@@ -61,13 +56,11 @@ const createTransfer = async (req, res) => {
 
 const getTransactionById = (req, res) => {
     const accNumber = req.accNumber
-    // const user = Transaction.findOne({ source: accNumber });
-    // console.log(user);
     Transaction.find({ source: accNumber })
         .then((result) => {
-            res.status(200).json({
+            res.status(200).json(
                 result
-            });
+            );
         })
         .catch((err) => {
             res.status(500).json({

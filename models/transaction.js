@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const transactionSchema = mongoose.Schema({
 
     type: {
-        type: String, // 'withdraw', 'transfer'
+        type: String,
         trim: true,
         required: true,
     },
